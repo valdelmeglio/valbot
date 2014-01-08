@@ -22,6 +22,8 @@ def get_neighboring_enemies(robot, game):
 		if loc in neighbors:
 			if other.player_id != robot.player_id:
 				neighboring_enemies.append(other.location)
+	if len(neighboring_enemies)>2: 			
+	    print len(neighboring_enemies)			
 	return neighboring_enemies
 
 class Robot:
@@ -31,6 +33,12 @@ class Robot:
         if self.location == rg.CENTER_POINT:
             print 'guard!'
             return ['guard']
+
+        # if in a spawn near spawn time, move towards centre
+        if game.turn % 10 >= 8 and "spawn" in rg.loc_types(self.location):
+            print 'Running away from spawn'
+            return ['move', rg.toward(self.location, rg.CENTER_POINT)]
+
 
         # if there are enemies around, attack them
         for loc, bot in game.robots.iteritems():
