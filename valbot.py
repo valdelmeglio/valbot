@@ -26,7 +26,17 @@ def get_neighboring_enemies(robot, game):
 	    print len(neighboring_enemies)			
 	return neighboring_enemies
 
+
+
+
 class Robot:
+
+    def is_being_attacked_by_stronger(self, game):
+        for rloc, r in game.robots.iteritems():
+            if r.player_id != self.player_id and rg.wdist( rloc, self.location) == 1 and r.hp > self.hp:
+                return True
+        return False
+
     def act(self, game):
         adjEnemyCount = 0 # adjacent enemy robots
         # if we're in the center, stay put
@@ -45,7 +55,13 @@ class Robot:
             assist_action = should_assist(self, game)
     	    if (assist_action is not None): 
     	        return assist_action
-    	        
+    	       
+    	    if not self.is_being_attacked_by_stronger(game):
+    	        if rg.dist(loc, self.location) == 1:
+                    print 'attack weaker!'
+                    return ["attack", loc]    
+                    
+                    
             if bot.player_id != self.player_id:
                 if rg.wdist(loc, self.location) == 1:
                     adjEnemyCount += 1
@@ -58,3 +74,6 @@ class Robot:
 
         # move toward the center
         return ['move', rg.toward(self.location, rg.CENTER_POINT)]
+        
+        
+        
