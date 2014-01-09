@@ -37,7 +37,9 @@ class Robot:
                 return True
         return False
 
+
     def act(self, game):
+
         adjEnemyCount = 0 # adjacent enemy robots
         # if we're in the center, stay put
         if self.location == rg.CENTER_POINT:
@@ -55,13 +57,20 @@ class Robot:
             assist_action = should_assist(self, game)
     	    if (assist_action is not None): 
     	        return assist_action
-    	       
+    	    '''  
     	    if not self.is_being_attacked_by_stronger(game):
-    	        if rg.dist(loc, self.location) == 1:
+    	        attack_scores = [(self.attack_score(game, friendly_locs, loc), loc) for loc in adjs]
+    	        maxscore, maxloc = max(attack_scores)
+    	        if maxscore > 0:
                     print 'attack weaker!'
-                    return ["attack", loc]    
-                    
-                    
+                    return ["attack", maxloc]    
+            else:
+                move_scores = [(self.move_score(game, loc), loc) for loc in adjs]
+                maxscore, maxloc = max(move_scores)
+                guard_score = self.move_score(game, self.location)
+                if maxscore > guard_score:
+                    return ["move", maxloc]        
+            '''       
             if bot.player_id != self.player_id:
                 if rg.wdist(loc, self.location) == 1:
                     adjEnemyCount += 1
@@ -71,6 +80,7 @@ class Robot:
                         return ['suicide']                    
                 if rg.dist(loc, self.location) <= 1:
                     return ['attack', loc]
+
 
         # move toward the center
         return ['move', rg.toward(self.location, rg.CENTER_POINT)]
