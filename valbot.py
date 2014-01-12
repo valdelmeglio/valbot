@@ -54,6 +54,12 @@ class Robot:
 
         # if there are enemies around, attack them
         for loc, bot in game.robots.iteritems():
+            '''
+            if bot.player_id == self.player_id:
+                for dest in rg.locs_around(self.location, filter_out=('invalid', 'obstacle', 'spawn')):  
+                    print 'diocane' 
+                    return ['move', dest]
+            '''
             assist_action = should_assist(self, game)
     	    if (assist_action is not None): 
     	        return assist_action
